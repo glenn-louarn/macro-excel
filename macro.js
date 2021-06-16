@@ -35,25 +35,20 @@ function findWordInLineV2(depart, word, spreadsheet) {
 }
 function ajouterUnProduitUneFeuille(nameFeuille, ss) {
     ss.setActiveSheet(ss.getSheetByName(nameFeuille), true);
-    ss.getRange('A3').activate();
-    ss.getActiveSheet().insertRowsAfter(ss.getActiveRange().getLastRow(), 1);
-    ss.getActiveRange().offset(ss.getActiveRange().getNumRows(), 0, 1, ss.getActiveRange().getNumColumns()).activate();
-    ss.getRange('A4').activate();
-    ss.getRange('3:3').copyTo(ss.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+    ss.getActiveSheet().insertRowsAfter(ss.getRange('A3').getLastRow(), 1);
+    ss.getRange('A3').offset(ss.getRange('A3').getNumRows(), 0, 1, ss.getRange('A3').getNumColumns());
+    ss.getRange('3:3').copyTo(ss.getRange('A4'), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
 }
 
 //document a partir d'un template https://stackoverflow.com/questions/58611018/how-to-create-a-new-document-from-a-template-with-placeholders
 function Ajouterunproduit() {
     var ss = SpreadsheetApp.getActive();
+    ss.setActiveSheet(ss.getSheetByName('Produit'), true);
     var name = Browser.inputBox('Nom du produit', Browser.Buttons.OK_CANCEL);
     var prix = Browser.inputBox('Prix du produit', Browser.Buttons.OK_CANCEL);
-    ss.setActiveSheet(ss.getSheetByName('Produit'), true);
-    ss.getRange('A3').activate();
-    ss.getActiveSheet().insertRowsAfter(ss.getActiveRange().getRow(), 1);
-    ss.getRange('A4').activate();
-    ss.getCurrentCell().setValue(name);
-    ss.getRange('B4').activate();
-    ss.getCurrentCell().setValue(prix);
+    ss.getActiveSheet().insertRowsAfter(ss.getRange('A3').getRow(), 1);
+    ss.getRange('A4').setValue(name);
+    ss.getRange('B4').setValue(prix);
     var namesMagasin = sheetsNamesMagasin();
     for (var i = 0; i < namesMagasin.length; i++) {
         ajouterUnProduitUneFeuille(namesMagasin[i], ss)
@@ -92,4 +87,8 @@ function AjouterAction(nom, depart) {
     ss.getCurrentCell().setFormula(ss.getCurrentCell().getFormula() + '+' + newActionCellule);
     var destinationRange = ss.getActiveRange().offset(0, 0, 27);
     ss.getActiveRange().autoFill(destinationRange, SpreadsheetApp.AutoFillSeries.DEFAULT_SERIES);
+
 };
+
+
+
